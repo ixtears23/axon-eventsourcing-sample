@@ -32,7 +32,7 @@ public class ExpenditureResolutionAggregate {
     private String applicationCategory;
     private String electronicPaymentNumber;
 
-    @AggregateMember
+//    @AggregateMember
     private List<ExpenditureResolutionDetail> detailList;
 
     @Autowired

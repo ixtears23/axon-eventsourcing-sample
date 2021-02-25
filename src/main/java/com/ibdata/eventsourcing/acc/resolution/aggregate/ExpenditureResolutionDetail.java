@@ -1,18 +1,20 @@
 package com.ibdata.eventsourcing.acc.resolution.aggregate;
 
 import com.ibdata.eventsourcing.acc.resolution.coreapi.command.SaveExpenditureResolutionDetailCommand;
-import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionChangedEvent;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionDetailChangedEvent;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionDetailCreatedEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
+import org.axonframework.modelling.command.EntityId;
+
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 public class ExpenditureResolutionDetail {
 
     private String resolutionDate;
     private String resolutionNumber;
+    @EntityId
     private String resolutionTurn;
     private String user;
     private String accNumber;

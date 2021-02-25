@@ -8,7 +8,7 @@ import com.ibdata.eventsourcing.acc.resolution.mapper.ResolutionMapper;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class ExpenditureResolutionProjection {
 
     private final ResolutionMapper resolutionMapper;

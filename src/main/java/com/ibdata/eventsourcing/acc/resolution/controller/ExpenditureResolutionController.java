@@ -27,7 +27,19 @@ public class ExpenditureResolutionController {
     @PostMapping("/save")
     public ResponseEntity saveResolution(@RequestBody ResolutionVO resolutionVO) {
 
-        saveExpenditureResolutionCommand(resolutionVO);
+//        saveExpenditureResolutionCommand(resolutionVO);
+        SaveExpenditureResolutionCommand saveExpenditureResolutionCommand = new SaveExpenditureResolutionCommand(
+                resolutionVO.getResolutionId(),
+                resolutionVO.getResolutionDate(),
+                resolutionVO.getResolutionNumber(),
+                resolutionVO.getApplicant(),
+                resolutionVO.getApplicationAmount(),
+                resolutionVO.getSummary(),
+                resolutionVO.getSummary(),
+                resolutionVO.getApplicationCategory(),
+                resolutionVO.getElectronicPaymentNumber()
+        );
+        commandGateway.send(saveExpenditureResolutionCommand);
         saveExpenditureResolutionDetailCommand(resolutionVO.getResolutionDetailVO());
 
         return new ResponseEntity(HttpStatus.OK);

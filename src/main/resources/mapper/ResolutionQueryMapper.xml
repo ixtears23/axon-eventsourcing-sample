@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ibdata.eventsourcing.acc.resolution.mapper.ResolutionQueryMapper">
+
+    <select id="findById" parameterType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolution" resultType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolution">
+        SELECT RESOLUTION_DATE,
+               RESOLUTION_NUMBER,
+               APPLICANT,
+               APPLICATION_DEPARTMENT,
+               APPLICATION_AMOUNT,
+               SUMMARY,
+               APPLICATION_CATEGORY,
+               ELECTRONIC_PAYMENT_NUMBER
+        FROM TB_RESOLUTION
+        WHERE RESOLUTION_DATE = #{resolutionDate}
+        AND RESOLUTION_NUMBER = #{resolutionNumber}
+    </select>
+
+    <select id="findByApplicant" parameterType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolution" resultType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolution">
+        SELECT RESOLUTION_DATE,
+               RESOLUTION_NUMBER,
+               APPLICANT,
+               APPLICATION_DEPARTMENT,
+               APPLICATION_AMOUNT,
+               SUMMARY,
+               APPLICATION_CATEGORY,
+               ELECTRONIC_PAYMENT_NUMBER
+        FROM TB_RESOLUTION
+        WHERE APPLICANT = #{applicant}
+    </select>
+
+    <select id="findMaxId" parameterType="String" resultType="String">
+        SELECT RESOLUTION_NUMBER
+        FROM TB_RESOLUTION
+        WHERE RESOLUTION_NUMBER = #{resolutionNumber}
+    </select>
+
+</mapper>

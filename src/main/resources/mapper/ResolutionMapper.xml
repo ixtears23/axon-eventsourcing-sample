@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ibdata.eventsourcing.acc.resolution.mapper.ResolutionMapper">
+
+    <insert id="insertResolution" parameterType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolution">
+        INSERT INTO ibdata.TB_RESOLUTION (RESOLUTION_DATE, RESOLUTION_NUMBER, APPLICANT, APPLICATION_DEPARTMENT,
+                                          APPLICATION_AMOUNT, SUMMARY, APPLICATION_CATEGORY, ELECTRONIC_PAYMENT_NUMBER)
+        VALUES (#{resolutionDate}, #{resolutionNumber}, #{applicant}, #{applicationDepartment},
+                #{applicationAmount}, #{summary}, #{applicationCategory}, #{electronicPaymentNumber});
+    </insert>
+
+    <update id="updateResolution" parameterType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolution">
+        UPDATE ibdata.TB_RESOLUTION
+        SET APPLICANT                   = #{applicant},
+            APPLICATION_DEPARTMENT      = #{applicationDepartment},
+            APPLICATION_AMOUNT          = #{applicationAmount},
+            SUMMARY                     = #{summary},
+            APPLICATION_CATEGORY        = #{applicationCategory},
+            ELECTRONIC_PAYMENT_NUMBER   = #{electronicPaymentNumber}
+        WHERE RESOLUTION_DATE = #{resolutionDate}
+          AND RESOLUTION_NUMBER = #{resolutionNumber}
+    </update>
+
+    <delete id="deleteResolution" parameterType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolution">
+        DELETE FROM ibdata.TB_RESOLUTION
+        WHERE RESOLUTION_DATE = #{resolutionDate}
+          AND RESOLUTION_NUMBER = #{resolutionNumber}
+    </delete>
+
+    <insert id="insertResolutionDetail" parameterType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolutionDetail">
+        INSERT INTO ibdata.TB_RESOLUTION_DETAIL (RESOLUTION_DATE, RESOLUTION_NUMBER, RESOLUTION_TURN, USER, ACC_NUMBER,
+                                                 COST_CODE, BUDGET_YEAR, ANNUAL_NUMBER, RECEIPT, EXECUTION_AMOUNT, CARD_NUMBER,
+                                                 APPROVAL_NUMBER, CARD_COMPANY, BANK, ACCOUNT_HOLDER, ACCOUNT_NUMBER,
+                                                 CUSTOMER_NAME, CAUSE_ACTION_NUMBER)
+        VALUES (#{resolutionDate}, #{resolutionNumber}, #{resolutionTurn}, #{user}, #{accNumber},
+                #{costCode}, #{budgetYear}, #{annualNumber}, #{receipt}, #{executionAmount}, #{cardNumber},
+                #{approvalNumber}, #{cardCompany}, #{bank}, #{accountHolder}, #{accountNumber},
+                #{customerName}, #{causeActionNumber})
+    </insert>
+
+    <update id="updateResolutionDetail" parameterType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolutionDetail">
+        UPDATE ibdata.TB_RESOLUTION_DETAIL
+        SET USER                = #{user},
+            ACC_NUMBER          = #{accNumber},
+            COST_CODE           = #{costCode},
+            BUDGET_YEAR         = #{budgetYear},
+            ANNUAL_NUMBER       = #{annualNumber},
+            RECEIPT             = #{receipt},
+            EXECUTION_AMOUNT    = #{executionAmount},
+            CARD_NUMBER         = #{cardNumber},
+            APPROVAL_NUMBER     = #{approvalNumber},
+            CARD_COMPANY        = #{cardCompany},
+            BANK                = #{bank},
+            ACCOUNT_HOLDER      = #{accountHolder},
+            ACCOUNT_NUMBER      = #{accountNumber},
+            CUSTOMER_NAME       = #{customerName},
+            CAUSE_ACTION_NUMBER = #{causeActionNumber}
+        WHERE RESOLUTION_DATE = #{resolutionDate}
+        AND RESOLUTION_NUMBER = #{resolutionNumber}
+            RESOLUTION_TURN = #{resolutionTurn}
+    </update>
+
+    <delete id="deleteResolutionDetail" parameterType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolutionDetail">
+        DELETE FROM ibdata.TB_RESOLUTION_DETAIL
+        WHERE RESOLUTION_DATE = #{resolutionDate}
+        AND RESOLUTION_NUMBER = #{resolutionNumber}
+        RESOLUTION_TURN = #{resolutionTurn}
+    </delete>
+
+    <insert id="insertResolutionDetailAttachment" parameterType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolutionDetailAttachment">
+        INSERT INTO ibdata.TB_RESOLUTION_DETAIL_ATTACHMENT (RESOLUTION_DATE, RESOLUTION_NUMBER, RESOLUTION_TURN, ATTACHMENT_CATEGORY)
+        VALUES (#{resolutionDate}, #{resolutionNumber}, #{resolutionTurn}, #{attachmentCategory})
+    </insert>
+
+    <update id="updateResolutionDetailAttachment" parameterType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolutionDetailAttachment">
+        UPDATE ibdata.TB_RESOLUTION_DETAIL_ATTACHMENT
+        SET ATTACHMENT_CATEGORY = #{attachmentCategory},
+        WHERE RESOLUTION_DATE = #{resolutionDate}
+        AND RESOLUTION_NUMBER = #{resolutionNumber}
+        AND RESOLUTION_TURN = #{resolutionTurn}
+    </update>
+
+    <delete id="deleteResolutionDetailAttachment" parameterType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolutionDetailAttachment">
+        DELETE FROM ibdata.TB_RESOLUTION_DETAIL_ATTACHMENT
+        WHERE RESOLUTION_DATE = #{resolutionDate}
+        AND RESOLUTION_NUMBER = #{resolutionNumber}
+        AND RESOLUTION_TURN = #{resolutionTurn}
+    </delete>
+
+</mapper>

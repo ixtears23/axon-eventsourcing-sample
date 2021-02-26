@@ -1,9 +1,8 @@
 package com.ibdata.eventsourcing.acc.resolution.controller;
 
 import com.ibdata.eventsourcing.acc.resolution.coreapi.command.SaveExpenditureResolutionCommand;
-import com.ibdata.eventsourcing.acc.resolution.coreapi.command.SaveExpenditureResolutionDetailCommand;
-import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionDetailVO;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionVO;
+import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/expenditure/resolution")
+@Slf4j
 public class ExpenditureResolutionController {
 
     private CommandGateway commandGateway;
@@ -27,7 +25,8 @@ public class ExpenditureResolutionController {
     @PostMapping("/save")
     public ResponseEntity saveResolution(@RequestBody ResolutionVO resolutionVO) {
 
-//        saveExpenditureResolutionCommand(resolutionVO);
+        log.debug("안착");
+
         SaveExpenditureResolutionCommand saveExpenditureResolutionCommand = new SaveExpenditureResolutionCommand(
                 resolutionVO.getResolutionId(),
                 resolutionVO.getResolutionDate(),
@@ -37,55 +36,11 @@ public class ExpenditureResolutionController {
                 resolutionVO.getSummary(),
                 resolutionVO.getSummary(),
                 resolutionVO.getApplicationCategory(),
-                resolutionVO.getElectronicPaymentNumber()
+                resolutionVO.getElectronicPaymentNumber(),
+                resolutionVO.getResolutionDetailVO()
         );
         commandGateway.send(saveExpenditureResolutionCommand);
-        saveExpenditureResolutionDetailCommand(resolutionVO.getResolutionDetailVO());
-
         return new ResponseEntity(HttpStatus.OK);
     }
-
-    public void saveExpenditureResolutionCommand(ResolutionVO resolutionVO) {
-
-        SaveExpenditureResolutionCommand saveExpenditureResolutionCommand = new SaveExpenditureResolutionCommand(
-                resolutionVO.getResolutionId(),
-                resolutionVO.getResolutionDate(),
-                resolutionVO.getResolutionNumber(),
-                resolutionVO.getApplicant(),
-                resolutionVO.getApplicationAmount(),
-                resolutionVO.getSummary(),
-                resolutionVO.getSummary(),
-                resolutionVO.getApplicationCategory(),
-                resolutionVO.getElectronicPaymentNumber()
-        );
-        commandGateway.send(saveExpenditureResolutionCommand);
-    }
-
-    public void saveExpenditureResolutionDetailCommand(List<ResolutionDetailVO> detailList) {
-
-        for (ResolutionDetailVO detail : detailList) {
-            commandGateway.send(new SaveExpenditureResolutionDetailCommand(
-                    detail.getResolutionDate(),
-                    detail.getResolutionNumber(),
-                    detail.getResolutionTurn(),
-                    detail.getUser(),
-                    detail.getAccNumber(),
-                    detail.getCostCode(),
-                    detail.getBudgetYear(),
-                    detail.getAnnualNumber(),
-                    detail.getReceipt(),
-                    detail.getExecutionAmount(),
-                    detail.getCardNumber(),
-                    detail.getApprovalNumber(),
-                    detail.getCardCompany(),
-                    detail.getBank(),
-                    detail.getAccountHolder(),
-                    detail.getAccountNumber(),
-                    detail.getCustomerName(),
-                    detail.getCauseActionNumber()
-            ));
-        }
-    }
-
 
 }

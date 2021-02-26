@@ -6,6 +6,7 @@ import java.util.List;
 
 @Value
 public class ResolutionDetailVO {
+    String resolutionDetailId;
     String resolutionDate;
     String resolutionNumber;
     String resolutionTurn;

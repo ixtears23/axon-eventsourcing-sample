@@ -1,20 +1,19 @@
 package com.ibdata.eventsourcing.acc.resolution.aggregate;
 
-import com.ibdata.eventsourcing.acc.resolution.coreapi.command.SaveExpenditureResolutionDetailCommand;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionDetailChangedEvent;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionDetailCreatedEvent;
-import org.apache.commons.lang3.StringUtils;
-import org.axonframework.commandhandling.CommandHandler;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.EntityId;
 
-import static org.axonframework.modelling.command.AggregateLifecycle.apply;
-
+@AllArgsConstructor
 public class ExpenditureResolutionDetail {
 
+    @EntityId
+    private String resolutionDetailId;
     private String resolutionDate;
     private String resolutionNumber;
-    @EntityId
     private String resolutionTurn;
     private String user;
     private String accNumber;
@@ -32,79 +31,18 @@ public class ExpenditureResolutionDetail {
     private String customerName;
     private String causeActionNumber;
 
-    @CommandHandler
-    public void handle(SaveExpenditureResolutionDetailCommand command) {
-
-        if (isNew(command)) {
-
-            apply(new ExpenditureResolutionDetailCreatedEvent(
-                    command.getResolutionDate(),
-                    command.getResolutionNumber(),
-                    command.getResolutionTurn(),
-                    command.getUser(),
-                    command.getAccNumber(),
-                    command.getCostCode(),
-                    command.getBudgetYear(),
-                    command.getAnnualNumber(),
-                    command.getReceipt(),
-                    command.getExecutionAmount(),
-                    command.getCardNumber(),
-                    command.getApprovalNumber(),
-                    command.getCardCompany(),
-                    command.getBank(),
-                    command.getAccountHolder(),
-                    command.getAccountNumber(),
-                    command.getCustomerName(),
-                    command.getCauseActionNumber()
-            ));
-        } else {
-            apply(new ExpenditureResolutionDetailChangedEvent(
-                    command.getResolutionDate(),
-                    command.getResolutionNumber(),
-                    command.getResolutionTurn(),
-                    command.getUser(),
-                    command.getAccNumber(),
-                    command.getCostCode(),
-                    command.getBudgetYear(),
-                    command.getAnnualNumber(),
-                    command.getReceipt(),
-                    command.getExecutionAmount(),
-                    command.getCardNumber(),
-                    command.getApprovalNumber(),
-                    command.getCardCompany(),
-                    command.getBank(),
-                    command.getAccountHolder(),
-                    command.getAccountNumber(),
-                    command.getCustomerName(),
-                    command.getCauseActionNumber()
-            ));
-        }
-    }
-
-    private boolean isNew(SaveExpenditureResolutionDetailCommand command) {
-
-        boolean newResolutionDetail = false;
-
-        if (StringUtils.isBlank(command.getResolutionDate())
-                && StringUtils.isBlank(command.getResolutionNumber())
-                && StringUtils.isBlank(command.getResolutionTurn())) {
-            newResolutionDetail = true;
-        }
-
-        return newResolutionDetail;
-    }
-
     @EventSourcingHandler
     public void on(ExpenditureResolutionDetailCreatedEvent event) {
-        setExpenditureResolutionDetail(event.getResolutionDate(), event.getResolutionNumber(), event.getResolutionTurn(), event.getUser(), event.getAccNumber(), event.getCostCode(), event.getBudgetYear(), event.getAnnualNumber(), event.getReceipt(), event.getExecutionAmount(), event.getCardNumber(), event.getApprovalNumber(), event.getCardCompany(), event.getBank(), event.getAccountHolder(), event.getAccountNumber(), event.getCustomerName(), event.getCauseActionNumber());
+        setExpenditureResolutionDetail(event.getResolutionDetailId(), event.getResolutionDate(), event.getResolutionNumber(), event.getResolutionTurn(), event.getUser(), event.getAccNumber(), event.getCostCode(), event.getBudgetYear(), event.getAnnualNumber(), event.getReceipt(), event.getExecutionAmount(), event.getCardNumber(), event.getApprovalNumber(), event.getCardCompany(), event.getBank(), event.getAccountHolder(), event.getAccountNumber(), event.getCustomerName(), event.getCauseActionNumber());
     }
 
     @EventSourcingHandler
     public void on(ExpenditureResolutionDetailChangedEvent event) {
-        setExpenditureResolutionDetail(event.getResolutionDate(), event.getResolutionNumber(), event.getResolutionTurn(), event.getUser(), event.getAccNumber(), event.getCostCode(), event.getBudgetYear(), event.getAnnualNumber(), event.getReceipt(), event.getExecutionAmount(), event.getCardNumber(), event.getApprovalNumber(), event.getCardCompany(), event.getBank(), event.getAccountHolder(), event.getAccountNumber(), event.getCustomerName(), event.getCauseActionNumber());
+        setExpenditureResolutionDetail(event.getResolutionDetailId(), event.getResolutionDate(), event.getResolutionNumber(), event.getResolutionTurn(), event.getUser(), event.getAccNumber(), event.getCostCode(), event.getBudgetYear(), event.getAnnualNumber(), event.getReceipt(), event.getExecutionAmount(), event.getCardNumber(), event.getApprovalNumber(), event.getCardCompany(), event.getBank(), event.getAccountHolder(), event.getAccountNumber(), event.getCustomerName(), event.getCauseActionNumber());
     }
 
-    private void setExpenditureResolutionDetail(String resolutionDate, String resolutionNumber, String resolutionTurn, String user, String accNumber, String costCode, String budgetYear, String annualNumber, String receipt, String executionAmount, String cardNumber, String approvalNumber, String cardCompany, String bank, String accountHolder, String accountNumber, String customerName, String causeActionNumber) {
+    private void setExpenditureResolutionDetail(String resolutionDetailId, String resolutionDate, String resolutionNumber, String resolutionTurn, String user, String accNumber, String costCode, String budgetYear, String annualNumber, String receipt, String executionAmount, String cardNumber, String approvalNumber, String cardCompany, String bank, String accountHolder, String accountNumber, String customerName, String causeActionNumber) {
+        this.resolutionDetailId = resolutionDetailId;
         this.resolutionDate = resolutionDate;
         this.resolutionNumber = resolutionNumber;
         this.resolutionTurn = resolutionTurn;

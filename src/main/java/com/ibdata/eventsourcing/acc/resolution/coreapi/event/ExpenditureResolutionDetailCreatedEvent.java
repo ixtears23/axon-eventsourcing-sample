@@ -4,6 +4,7 @@ import lombok.Value;
 
 @Value
 public class ExpenditureResolutionDetailCreatedEvent {
+    String resolutionDetailId;
     String resolutionDate;
     String resolutionNumber;
     String resolutionTurn;

@@ -1,6 +1,9 @@
 package com.ibdata.eventsourcing.acc.resolution.coreapi.event;
 
+import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionDetailVO;
 import lombok.Value;
+
+import java.util.List;
 
 @Value
 public class ExpenditureResolutionChangedEvent {
@@ -13,4 +16,5 @@ public class ExpenditureResolutionChangedEvent {
     String summary;
     String applicationCategory;
     String electronicPaymentNumber;
+    List<ResolutionDetailVO> resolutionDetailVOList;
 }

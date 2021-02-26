@@ -1,7 +1,10 @@
 package com.ibdata.eventsourcing.acc.resolution.coreapi.command;
 
+import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionDetailVO;
 import lombok.Value;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
+
+import java.util.List;
 
 @Value
 public class SaveExpenditureResolutionCommand {
@@ -15,4 +18,5 @@ public class SaveExpenditureResolutionCommand {
     String summary;
     String applicationCategory;
     String electronicPaymentNumber;
+    List<ResolutionDetailVO> expenditureResolutionDetailList;
 }

@@ -46,7 +46,7 @@ logging:
   level:
     com:
       ibdata:
-        board: DEBUG
+        eventsourcing: DEBUG
     org:
       hibernate:
         SQL: DEBUG

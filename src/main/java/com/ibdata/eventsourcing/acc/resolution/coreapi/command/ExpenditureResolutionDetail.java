@@ -1,9 +1,11 @@
 package com.ibdata.eventsourcing.acc.resolution.coreapi.command;
 
 import lombok.Value;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 @Value
-public class SaveExpenditureResolutionDetailCommand {
+public class ExpenditureResolutionDetail {
+    String resolutionDetailId;
     String resolutionDate;
     String resolutionNumber;
     String resolutionTurn;

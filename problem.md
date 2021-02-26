@@ -53,7 +53,7 @@ Command에 @TargetIdentifier를 붙이지 않았더니 발생함.
 
 #### Command 'com.ibdata.eventsourcing.acc.resolution.coreapi.command.SaveExpenditureResolutionCommand' resulted in org.axonframework.messaging.annotation.MessageHandlerInvocationException(Error handling event of type [class com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionChangedEvent] in aggregate)
 2021-02-26
-- 해결방안
+- 해결
 @Aggregate 객체에서 Command 객체를 Arguments로 받는 생성자를 @CommandHandler 로 부여하니 문제가 해결 됨.  
 결국 Command객체를 Arguments로 받는 CommandHandler 생성자가 있어야 함.  
 
@@ -64,4 +64,11 @@ Command에 @TargetIdentifier를 붙이지 않았더니 발생함.
 바로 위의 방법으로 해결된 줄 알았는데  
 @CommandHandler는 타지만 동일한 오류 메세지 발생함.  
 CommandGateway.send를 호출하고 나서 오류가 발생됨.  
-의심되는 부분은 @AggregateIdentifier 필드가 null이 여서 발생하는 문제 같음.  
+의심되는 부분은 @AggregateIdentifier 필드가 null이 여서 발생하는 문제 같음.
+  
+## Mybatis Mapper를 @Aggregate에 객체에 주입하는 방법
+2021-02-26
+- 문제  
+뿐만 아니라 @Aggregate 객체에 Spring Bean 또한 @Autowired로 주입되지 않음.
+- 해결  
+@CommandHandler 주석이 붙어 있는 Aggreagte 생성자에 Arguments로 받아서 멤버필드에 값을 할당하면 주입됨.

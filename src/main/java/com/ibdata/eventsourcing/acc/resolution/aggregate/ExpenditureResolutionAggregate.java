@@ -15,6 +15,7 @@ import org.axonframework.modelling.command.AggregateMember;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,16 +39,23 @@ public class ExpenditureResolutionAggregate {
     @AggregateMember
     private List<ExpenditureResolutionDetail> detailList;
 
-    @Autowired
     private ResolutionQueryMapper queryMapper;
+
+    private DummyService dummyService;
 
     public ExpenditureResolutionAggregate() {
         // Axon Required...
     }
 
     @CommandHandler
-    public ExpenditureResolutionAggregate(SaveExpenditureResolutionCommand command) {
+    public ExpenditureResolutionAggregate(SaveExpenditureResolutionCommand command, ResolutionQueryMapper queryMapper, DummyService dummyService) {
+        this.queryMapper = queryMapper;
+        this.dummyService = dummyService;
         log.debug("comamnd 객체를 arguments로 받는 생성자가 없으면 안되나본데?");
+
+        if (dummyService == null) log.debug("dummyService is NULL!!!");
+        log.debug("THIS!!!DummyService print : " +  this.dummyService.printMyName());
+        log.debug("ARGUS!!DummyService print : " +  dummyService.printMyName());
         if (StringUtils.isBlank(command.getResolutionId())) {
             applyExpenditureResolutionCreatedEvent(command);
         } else {

@@ -1,6 +1,6 @@
 package com.ibdata.eventsourcing.acc.resolution.aggregate;
 
-import com.ibdata.eventsourcing.acc.resolution.coreapi.command.*;
+import com.ibdata.eventsourcing.acc.resolution.coreapi.command.SaveExpenditureResolutionCommand;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionChangedEvent;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionCreatedEvent;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionDetailVO;
@@ -13,10 +13,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateMember;
 import org.axonframework.spring.stereotype.Aggregate;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +24,7 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 public class ExpenditureResolutionAggregate {
 
     @AggregateIdentifier
-    private String ResolutionId;
+    private String resolutionId;
     private String resolutionDate;
     private String resolutionNumber;
     private String applicant;
@@ -58,8 +55,10 @@ public class ExpenditureResolutionAggregate {
         log.debug("THIS!!!DummyService print : " +  this.dummyService.printMyName());
         log.debug("ARGUS!!DummyService print : " +  dummyService.printMyName());
         if (StringUtils.isBlank(command.getResolutionId())) {
+            // 생성
             applyExpenditureResolutionCreatedEvent(command);
         } else {
+            // 변경 (변경하는 Event도 여기서 실행해도 되려나?)
             applyExpenditureResolutionChangedEvent(command);
         }
     }
@@ -81,6 +80,32 @@ public class ExpenditureResolutionAggregate {
 
         String maxId = queryMapper.findMaxId(ResolutionKeyUtils.getToday());
 
+        List<ResolutionDetailVO> resolutionDetailVOList = new ArrayList<>();
+        for (ResolutionDetailVO detailVO : command.getExpenditureResolutionDetailList()) {
+            resolutionDetailVOList.add(new ResolutionDetailVO(
+                    ResolutionKeyUtils.generateResolutionId(maxId) + detailVO.getResolutionTurn(),
+                    ResolutionKeyUtils.getToday(),
+                    ResolutionKeyUtils.generateResolutionNumber(maxId),
+                    detailVO.getResolutionTurn(),
+                    detailVO.getUser(),
+                    detailVO.getAccNumber(),
+                    detailVO.getCostCode(),
+                    detailVO.getBudgetYear(),
+                    detailVO.getAnnualNumber(),
+                    detailVO.getReceipt(),
+                    detailVO.getExecutionAmount(),
+                    detailVO.getCardNumber(),
+                    detailVO.getApprovalNumber(),
+                    detailVO.getCardCompany(),
+                    detailVO.getBank(),
+                    detailVO.getAccountHolder(),
+                    detailVO.getAccountNumber(),
+                    detailVO.getCustomerName(),
+                    detailVO.getCauseActionNumber(),
+                    null
+            ));
+        }
+
         apply(new ExpenditureResolutionCreatedEvent(
                 ResolutionKeyUtils.generateResolutionId(maxId),
                 ResolutionKeyUtils.getToday(),
@@ -91,7 +116,7 @@ public class ExpenditureResolutionAggregate {
                 command.getSummary(),
                 command.getApplicationCategory(),
                 command.getElectronicPaymentNumber(),
-                command.getExpenditureResolutionDetailList()
+                resolutionDetailVOList
         ));
     }
 
@@ -140,7 +165,7 @@ public class ExpenditureResolutionAggregate {
     }
 
     private void saveEvent(String resolutionId, String resolutionDate, String resolutionNumber, String applicant, String applicationDepartment, String applicationAmount, String summary, String applicationCategory, String electronicPaymentNumber, List<ResolutionDetailVO> resolutionDetailVO) {
-        this.ResolutionId = resolutionId;
+        this.resolutionId = resolutionId;
         this.resolutionDate = resolutionDate;
         this.resolutionNumber = resolutionNumber;
         this.applicant = applicant;
@@ -151,7 +176,7 @@ public class ExpenditureResolutionAggregate {
         this.electronicPaymentNumber = electronicPaymentNumber;
 
         for (ResolutionDetailVO detailVO : resolutionDetailVO) {
-            this.detailList.add(new ExpenditureResolutionDetail(
+            ExpenditureResolutionDetail expenditureResolutionDetail = new ExpenditureResolutionDetail(
                     resolutionId + detailVO.getResolutionTurn(),
                     resolutionDate,
                     resolutionNumber,
@@ -171,7 +196,9 @@ public class ExpenditureResolutionAggregate {
                     detailVO.getAccountNumber(),
                     detailVO.getCustomerName(),
                     detailVO.getCauseActionNumber()
-            ));
+            );
+            this.detailList.add(expenditureResolutionDetail);
+//            apply(expenditureResolutionDetail);
         }
     }
 

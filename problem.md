@@ -71,10 +71,17 @@ List 관련 에러가 발생했다면 금방 찾았을텐데 @CommandHandler 에
 한참 찾은듯..
 위의 상황으로 볼때 위 에러는 @CommandHandler 메서드 안에서 오류발생 시 발생되는 Exception이 아닐까 싶다.
   
-## Mybatis Mapper를 @Aggregate에 객체에 주입하는 방법
+#### Mybatis Mapper를 @Aggregate에 객체에 주입하는 방법
 2021-02-26
 - 문제  
 뿐만 아니라 @Aggregate 객체에 Spring Bean 또한 @Autowired로 주입되지 않음.
 - 해결  
 @CommandHandler 주석이 붙어 있는 Aggreagte 생성자에 Arguments로 받아서 멤버필드에 값을 할당하면 주입됨.
   
+
+#### Command 'com.ibdata.eventsourcing.acc.resolution.coreapi.command.SaveExpenditureResolutionCommand' resulted in org.axonframework.eventsourcing.eventstore.EventStoreException(Cannot reuse aggregate identifier [202132000001] to create aggregate [ExpenditureResolutionAggregate] since identifiers need to be unique.)
+2021-03-02
+- 일부 번역 
+  집계 식별자 [202132000001]을 (를) 재사용하여 집계 [ExpenditureResolutionAggregate]를 생성 할 수 없습니다. 식별자는 고유해야하기 때문입니다.  
+  
+- 

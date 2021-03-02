@@ -1,0 +1,47 @@
+package com.ibdata.eventsourcing.acc.resolution.controller;
+
+import com.ibdata.eventsourcing.acc.resolution.aggregate.ExpenditureResolutionAggregate;
+import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionCreatedEvent;
+import com.ibdata.eventsourcing.acc.resolution.coreapi.query.ExpenditureResolutionQuery;
+import lombok.extern.slf4j.Slf4j;
+import org.axonframework.eventsourcing.eventstore.DomainEventStream;
+import org.axonframework.eventsourcing.eventstore.EventStore;
+import org.axonframework.queryhandling.QueryGateway;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+
+@RestController("/expenditure/resolution/query")
+@Slf4j
+public class ExpenditureResolutionQueryController {
+
+    private final QueryGateway queryGateway;
+    private final EventStore eventStore;
+
+    public ExpenditureResolutionQueryController(QueryGateway queryGateway, EventStore eventStore) {
+        this.queryGateway = queryGateway;
+        this.eventStore = eventStore;
+    }
+
+    @GetMapping("/all")
+    public ExpenditureResolutionCreatedEvent findAll() throws ExecutionException, InterruptedException {
+        CompletableFuture<ExpenditureResolutionCreatedEvent> future = queryGateway.query(new ExpenditureResolutionQuery("202132000001"), ExpenditureResolutionCreatedEvent.class);
+        return future.get();
+    }
+
+    @GetMapping("/find")
+    public List<?> findOne() {
+
+        DomainEventStream domainEventStream = eventStore.readEvents("202132000001", 6);
+        List<?> collect1 = eventStore.readEvents("202132000001", 0).asStream().map(s -> s.getPayload()).collect(Collectors.toList());
+
+
+        List<?> collect = eventStore.readEvents("").asStream().map(s -> s.getPayload()).collect(Collectors.toList());
+        List<?> list = eventStore.readEvents("202132000001").asStream().map(s -> s.getPayload()).collect(Collectors.toList());
+        return collect1;
+    }
+}

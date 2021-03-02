@@ -39,21 +39,14 @@ public class ExpenditureResolutionAggregate {
 
     private ResolutionQueryMapper queryMapper;
 
-    private DummyService dummyService;
-
     public ExpenditureResolutionAggregate() {
         // Axon Required...
     }
 
     @CommandHandler
-    public ExpenditureResolutionAggregate(SaveExpenditureResolutionCommand command, ResolutionQueryMapper queryMapper, DummyService dummyService) {
+    public ExpenditureResolutionAggregate(SaveExpenditureResolutionCommand command, ResolutionQueryMapper queryMapper) {
         this.queryMapper = queryMapper;
-        this.dummyService = dummyService;
-        log.debug("comamnd 객체를 arguments로 받는 생성자가 없으면 안되나본데?");
 
-        if (dummyService == null) log.debug("dummyService is NULL!!!");
-        log.debug("THIS!!!DummyService print : " +  this.dummyService.printMyName());
-        log.debug("ARGUS!!DummyService print : " +  dummyService.printMyName());
         if (StringUtils.isBlank(command.getResolutionId())) {
             // 생성
             applyExpenditureResolutionCreatedEvent(command);
@@ -62,19 +55,6 @@ public class ExpenditureResolutionAggregate {
             applyExpenditureResolutionChangedEvent(command);
         }
     }
-
-
-    /**
-    @CommandHandler
-    public void handle(SaveExpenditureResolutionCommand command) {
-        log.debug("여기 온거유 만거유");
-        if (StringUtils.isNotBlank(command.getResolutionId())) {
-            applyExpenditureResolutionCreatedEvent(command);
-        } else {
-            applyExpenditureResolutionChangedEvent(command);
-        }
-    }
-    */
 
     private void applyExpenditureResolutionCreatedEvent(SaveExpenditureResolutionCommand command) {
 
@@ -176,8 +156,9 @@ public class ExpenditureResolutionAggregate {
         this.electronicPaymentNumber = electronicPaymentNumber;
 
         for (ResolutionDetailVO detailVO : resolutionDetailVO) {
+
             ExpenditureResolutionDetail expenditureResolutionDetail = new ExpenditureResolutionDetail(
-                    resolutionId + detailVO.getResolutionTurn(),
+                    detailVO.getResolutionDetailId() == null ? resolutionId + detailVO.getResolutionTurn() : detailVO.getResolutionDetailId(),
                     resolutionDate,
                     resolutionNumber,
                     detailVO.getResolutionTurn(),
@@ -198,7 +179,7 @@ public class ExpenditureResolutionAggregate {
                     detailVO.getCauseActionNumber()
             );
             this.detailList.add(expenditureResolutionDetail);
-//            apply(expenditureResolutionDetail);
+            apply(expenditureResolutionDetail);
         }
     }
 

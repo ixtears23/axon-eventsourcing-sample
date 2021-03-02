@@ -23,8 +23,8 @@ public class ResolutionKeyUtils {
     public static String getToday() {
         LocalDateTime now = LocalDateTime.now();
         String year = now.getYear() + "";
-        String month = now.getMonthValue() + "";
-        String day = now.getDayOfMonth() + "";
+        String month = StringUtils.leftPad(now.getMonthValue() + "", 2 ,'0');
+        String day = StringUtils.leftPad(now.getDayOfMonth() + "", 2 ,'0');
         return year + month + day;
     }
 }

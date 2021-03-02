@@ -65,6 +65,11 @@ Command에 @TargetIdentifier를 붙이지 않았더니 발생함.
 @CommandHandler는 타지만 동일한 오류 메세지 발생함.  
 CommandGateway.send를 호출하고 나서 오류가 발생됨.  
 의심되는 부분은 @AggregateIdentifier 필드가 null이 여서 발생하는 문제 같음.
+- 해결
+@AggregateMember 에 List 타입 멤버를 선언했는데, 초기화를 하지 않은상태에서 List.add를 실행했더니 발생 함.
+List 관련 에러가 발생했다면 금방 찾았을텐데 @CommandHandler 에서 오류가 발생하니 Axon Exception 메세지를 뿌려줘서
+한참 찾은듯..
+위의 상황으로 볼때 위 에러는 @CommandHandler 메서드 안에서 오류발생 시 발생되는 Exception이 아닐까 싶다.
   
 ## Mybatis Mapper를 @Aggregate에 객체에 주입하는 방법
 2021-02-26
@@ -72,3 +77,4 @@ CommandGateway.send를 호출하고 나서 오류가 발생됨.
 뿐만 아니라 @Aggregate 객체에 Spring Bean 또한 @Autowired로 주입되지 않음.
 - 해결  
 @CommandHandler 주석이 붙어 있는 Aggreagte 생성자에 Arguments로 받아서 멤버필드에 값을 할당하면 주입됨.
+  

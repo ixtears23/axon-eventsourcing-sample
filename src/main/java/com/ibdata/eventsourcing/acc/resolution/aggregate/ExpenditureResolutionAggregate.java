@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
@@ -37,7 +38,7 @@ public class ExpenditureResolutionAggregate {
     private String electronicPaymentNumber;
 
     @AggregateMember
-    private List<ExpenditureResolutionDetail> detailList;
+    private List<ExpenditureResolutionDetail> detailList = new ArrayList<>();
 
     private ResolutionQueryMapper queryMapper;
 
@@ -151,9 +152,9 @@ public class ExpenditureResolutionAggregate {
 
         for (ResolutionDetailVO detailVO : resolutionDetailVO) {
             this.detailList.add(new ExpenditureResolutionDetail(
-                    detailVO.getResolutionDetailId(),
-                    detailVO.getResolutionDate(),
-                    detailVO.getResolutionNumber(),
+                    resolutionId + detailVO.getResolutionTurn(),
+                    resolutionDate,
+                    resolutionNumber,
                     detailVO.getResolutionTurn(),
                     detailVO.getUser(),
                     detailVO.getAccNumber(),

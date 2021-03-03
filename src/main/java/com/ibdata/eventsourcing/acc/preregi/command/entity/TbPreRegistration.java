@@ -1,4 +1,4 @@
-package com.ibdata.eventsourcing.acc.preregi.entity;
+package com.ibdata.eventsourcing.acc.preregi.command.entity;
 
 /**
  * 사전등록

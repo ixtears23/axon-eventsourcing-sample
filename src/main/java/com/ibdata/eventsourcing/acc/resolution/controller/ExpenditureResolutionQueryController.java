@@ -8,6 +8,7 @@ import org.axonframework.eventsourcing.eventstore.DomainEventStream;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -29,19 +30,15 @@ public class ExpenditureResolutionQueryController {
 
     @GetMapping("/all")
     public ExpenditureResolutionCreatedEvent findAll() throws ExecutionException, InterruptedException {
-        CompletableFuture<ExpenditureResolutionCreatedEvent> future = queryGateway.query(new ExpenditureResolutionQuery("202132000001"), ExpenditureResolutionCreatedEvent.class);
+        CompletableFuture<ExpenditureResolutionCreatedEvent> future = queryGateway.query(new ExpenditureResolutionQuery("20210302000001"), ExpenditureResolutionCreatedEvent.class);
         return future.get();
     }
 
-    @GetMapping("/find")
-    public List<?> findOne() {
+    @GetMapping("/find/{resolutionId}")
+    public List<?> findOne(@PathVariable String resolutionId) {
 
-        DomainEventStream domainEventStream = eventStore.readEvents("202132000001", 6);
-        List<?> collect1 = eventStore.readEvents("202132000001", 0).asStream().map(s -> s.getPayload()).collect(Collectors.toList());
-
-
-        List<?> collect = eventStore.readEvents("").asStream().map(s -> s.getPayload()).collect(Collectors.toList());
-        List<?> list = eventStore.readEvents("202132000001").asStream().map(s -> s.getPayload()).collect(Collectors.toList());
-        return collect1;
+        // SequenceNumber 2 이상인 것 조회
+        List<?> list = eventStore.readEvents(resolutionId, 2).asStream().map(s -> s.getPayload()).collect(Collectors.toList());
+        return list;
     }
 }

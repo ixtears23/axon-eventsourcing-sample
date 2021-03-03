@@ -1,13 +1,12 @@
 package com.ibdata.eventsourcing.acc.resolution.aggregate;
 
-import com.ibdata.eventsourcing.acc.resolution.coreapi.command.SaveExpenditureResolutionCommand;
+import com.ibdata.eventsourcing.acc.resolution.coreapi.command.ChangeExpenditureResolutionCommand;
+import com.ibdata.eventsourcing.acc.resolution.coreapi.command.CreateExpenditureResolutionCommand;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionChangedEvent;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionCreatedEvent;
+import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionDetailChangedEvent;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionDetailVO;
-import com.ibdata.eventsourcing.acc.resolution.domain.ResolutionKeyUtils;
-import com.ibdata.eventsourcing.acc.resolution.mapper.ResolutionQueryMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
@@ -44,19 +43,12 @@ public class ExpenditureResolutionAggregate {
     }
 
     @CommandHandler
-    public ExpenditureResolutionAggregate(SaveExpenditureResolutionCommand command, ResolutionQueryMapper queryMapper) {
+    public ExpenditureResolutionAggregate(CreateExpenditureResolutionCommand command, ResolutionQueryMapper queryMapper) {
         this.queryMapper = queryMapper;
-
-        if (StringUtils.isBlank(command.getResolutionId())) {
-            // 생성
-            applyExpenditureResolutionCreatedEvent(command);
-        } else {
-            // 변경 (변경하는 Event도 여기서 실행해도 되려나?)
-            applyExpenditureResolutionChangedEvent(command);
-        }
+        applyExpenditureResolutionCreatedEvent(command);
     }
 
-    private void applyExpenditureResolutionCreatedEvent(SaveExpenditureResolutionCommand command) {
+    private void applyExpenditureResolutionCreatedEvent(CreateExpenditureResolutionCommand command) {
 
         String maxId = queryMapper.findMaxId(ResolutionKeyUtils.getToday());
 
@@ -100,7 +92,12 @@ public class ExpenditureResolutionAggregate {
         ));
     }
 
-    private void applyExpenditureResolutionChangedEvent(SaveExpenditureResolutionCommand command) {
+    @CommandHandler
+    private void changeExpenditureResolutionCommand(ChangeExpenditureResolutionCommand command) {
+        applyExpenditureResolutionChangedEvent(command);
+    }
+
+    private void applyExpenditureResolutionChangedEvent(ChangeExpenditureResolutionCommand command) {
         apply(new ExpenditureResolutionChangedEvent(
                 command.getResolutionId(),
                 command.getResolutionDate(),
@@ -127,7 +124,6 @@ public class ExpenditureResolutionAggregate {
                 event.getApplicationCategory(),
                 event.getElectronicPaymentNumber(),
                 event.getResolutionDetailVOList());
-
     }
 
     @EventSourcingHandler
@@ -157,6 +153,28 @@ public class ExpenditureResolutionAggregate {
 
         for (ResolutionDetailVO detailVO : resolutionDetailVO) {
 
+            ExpenditureResolutionDetailChangedEvent expenditureResolutionDetailCreatedEvent = new ExpenditureResolutionDetailChangedEvent(
+                    detailVO.getResolutionDetailId() == null ? resolutionId + detailVO.getResolutionTurn() : detailVO.getResolutionDetailId(),
+                    resolutionDate,
+                    resolutionNumber,
+                    detailVO.getResolutionTurn(),
+                    detailVO.getUser(),
+                    detailVO.getAccNumber(),
+                    detailVO.getCostCode(),
+                    detailVO.getBudgetYear(),
+                    detailVO.getAnnualNumber(),
+                    detailVO.getReceipt(),
+                    detailVO.getExecutionAmount(),
+                    detailVO.getCardNumber(),
+                    detailVO.getApprovalNumber(),
+                    detailVO.getCardCompany(),
+                    detailVO.getBank(),
+                    detailVO.getAccountHolder(),
+                    detailVO.getAccountNumber(),
+                    detailVO.getCustomerName(),
+                    detailVO.getCauseActionNumber()
+            );
+
             ExpenditureResolutionDetail expenditureResolutionDetail = new ExpenditureResolutionDetail(
                     detailVO.getResolutionDetailId() == null ? resolutionId + detailVO.getResolutionTurn() : detailVO.getResolutionDetailId(),
                     resolutionDate,
@@ -178,8 +196,9 @@ public class ExpenditureResolutionAggregate {
                     detailVO.getCustomerName(),
                     detailVO.getCauseActionNumber()
             );
+
             this.detailList.add(expenditureResolutionDetail);
-            apply(expenditureResolutionDetail);
+            apply(expenditureResolutionDetailCreatedEvent);
         }
     }
 

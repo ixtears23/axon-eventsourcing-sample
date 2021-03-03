@@ -1,0 +1,5 @@
+###
+GET http://localhost:8888/all
+
+###
+GET http://localhost:8888/find/20210302000001

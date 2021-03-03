@@ -7,7 +7,7 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier;
 import java.util.List;
 
 @Value
-public class SaveExpenditureResolutionCommand {
+public class CreateExpenditureResolutionCommand {
     @TargetAggregateIdentifier
     String resolutionId;
     String resolutionDate;

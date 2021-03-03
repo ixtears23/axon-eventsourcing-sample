@@ -79,9 +79,14 @@ List 관련 에러가 발생했다면 금방 찾았을텐데 @CommandHandler 에
 @CommandHandler 주석이 붙어 있는 Aggreagte 생성자에 Arguments로 받아서 멤버필드에 값을 할당하면 주입됨.
   
 
+#### (conn=3097) Duplicate entry '20210302000001-0' for key 'UK8s1f994p4la2ipb13me2xqm1w'
 #### Command 'com.ibdata.eventsourcing.acc.resolution.coreapi.command.SaveExpenditureResolutionCommand' resulted in org.axonframework.eventsourcing.eventstore.EventStoreException(Cannot reuse aggregate identifier [202132000001] to create aggregate [ExpenditureResolutionAggregate] since identifiers need to be unique.)
 2021-03-02
 - 일부 번역 
   집계 식별자 [202132000001]을 (를) 재사용하여 집계 [ExpenditureResolutionAggregate]를 생성 할 수 없습니다. 식별자는 고유해야하기 때문입니다.  
   
-- 
+- 추측  
+`@CommandHandler` 애너테이션이 붙은 생성자에서 객체 생성이 아닌 수정 작업을 하니 오류 발생.  
+  어떤 원리에 의해 Unique Key를 할당하는지는 확실하지 않지만 domain_event_entry테이블에 insert 할 때 동일한 identifierId로 이한 Sql 오류 발생
+
+

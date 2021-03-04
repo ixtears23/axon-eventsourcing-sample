@@ -2,10 +2,12 @@ package com.ibdata.eventsourcing.acc.resolution.coreapi.event;
 
 import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionDetailVO;
 import lombok.Value;
+import org.axonframework.serialization.Revision;
 
 import java.util.List;
 
 @Value
+@Revision("2.0")
 public class ExpenditureResolutionChangedEvent {
     String resolutionId;
     String resolutionDate;

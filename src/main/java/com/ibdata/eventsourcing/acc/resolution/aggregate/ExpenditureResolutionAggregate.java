@@ -6,6 +6,8 @@ import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResoluti
 import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionCreatedEvent;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionDetailChangedEvent;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionDetailVO;
+import com.ibdata.eventsourcing.acc.resolution.domain.ResolutionKeyUtils;
+import com.ibdata.eventsourcing.acc.resolution.mapper.ResolutionQueryMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -18,8 +20,8 @@ import java.util.List;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
-@Aggregate
 @Slf4j
+@Aggregate(snapshotTriggerDefinition = "snapshotTriggerDefinition")
 public class ExpenditureResolutionAggregate {
 
     @AggregateIdentifier
@@ -142,14 +144,14 @@ public class ExpenditureResolutionAggregate {
 
     private void saveEvent(String resolutionId, String resolutionDate, String resolutionNumber, String applicant, String applicationDepartment, String applicationAmount, String summary, String applicationCategory, String electronicPaymentNumber, List<ResolutionDetailVO> resolutionDetailVO) {
         this.resolutionId = resolutionId;
-        this.resolutionDate = resolutionDate;
-        this.resolutionNumber = resolutionNumber;
-        this.applicant = applicant;
-        this.applicationDepartment = applicationDepartment;
-        this.applicationAmount = applicationAmount;
-        this.summary = summary;
-        this.applicationCategory = applicationCategory;
-        this.electronicPaymentNumber = electronicPaymentNumber;
+//        this.resolutionDate = resolutionDate;
+//        this.resolutionNumber = resolutionNumber;
+//        this.applicant = applicant;
+//        this.applicationDepartment = applicationDepartment;
+//        this.applicationAmount = applicationAmount;
+//        this.summary = summary;
+//        this.applicationCategory = applicationCategory;
+//        this.electronicPaymentNumber = electronicPaymentNumber;
 
         for (ResolutionDetailVO detailVO : resolutionDetailVO) {
 
@@ -197,7 +199,7 @@ public class ExpenditureResolutionAggregate {
                     detailVO.getCauseActionNumber()
             );
 
-            this.detailList.add(expenditureResolutionDetail);
+//            this.detailList.add(expenditureResolutionDetail);
             apply(expenditureResolutionDetailCreatedEvent);
         }
     }

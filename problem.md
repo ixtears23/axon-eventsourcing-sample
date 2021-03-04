@@ -90,3 +90,17 @@ List 관련 에러가 발생했다면 금방 찾았을텐데 @CommandHandler 에
   어떤 원리에 의해 Unique Key를 할당하는지는 확실하지 않지만 domain_event_entry테이블에 insert 할 때 동일한 identifierId로 이한 Sql 오류 발생
 
 
+#### Command 'com.ibdata.eventsourcing.acc.resolution.coreapi.command.ChangeExpenditureResolutionCommand' resulted in org.axonframework.eventsourcing.IncompatibleAggregateException(Aggregate identifier must be non-null after applying an event. Make sure the aggregate identifier is initialized at the latest when handling the creation event.)
+2021-03-04
+- 번역  
+  ChangeExpenditureResolutionCommand 명령으로 인해 IncompatibleAggregateException 발생  
+  이벤트를 적용한 후 집계 식별자는 Null이 아니어야합니다.  
+  생성 이벤트를 처리할 때 애그리게이트 식별자가 가장 늦게 초기화되었는지 확인하십시오.(말이 이상하게 번역됨...  
+  
+- 해결  
+  `@EventSourcingHandler` 에서 `@AggregateIdentifier` 식별자 ID 필드에 값을 대입하지 않으면 오류 발생  
+  식별자ID에만 값을 대입하면 오류 발생하지 않음  
+  
+
+
+  

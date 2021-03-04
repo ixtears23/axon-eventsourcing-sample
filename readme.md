@@ -95,5 +95,26 @@ AggreagateMember를 사용하는 이유와 AggregateMember 관련 내용
 
 
 
+### @EventHandler vs @EventSourcingHandler
+[AxonIQ](https://discuss.axoniq.io/t/differences-between-eventhandler-and-eventsourcinghandler/2432/2)
+
+> EvnetSourcingHandler는 Command사이드의 Aggregate에 있고  
+> EventHandler는 일반적으로 Event가 발생한 후 수행할 작업을 지시하기 위해 Query side에 있음.    
+
+> EventSourcingHandler가 실행을 완료하면  
+> 이벤트가 EventBus에 게시되고  
+> EventHandlers에 의해 포착됨.  
+  
+> 이벤트는 일반적으로 과거 시제로 명명되기 때문에 EventSourcingHandler를 현재로 생각하고  
+> EventHandler는 이벤트가 과거에 존재했으면 실행된다.  
+
+
+> (사실 단일 모듈 구조에서 EventHandlers 사용을 정당화하는 경우는 거의 없음).  
+
+### CommandGateway vs CommandBus
+[AxonIQ](https://discuss.axoniq.io/t/difference-between-command-bus-and-command-gateway/1297)  
+> Command는 항상 CommandBus를 통해서 전달 됨.  
+> 어떤 것을 사용하는지는 중요하지 않음.  
+> CommandGateway를 사용하는 쪽으로 가자...  
 
 

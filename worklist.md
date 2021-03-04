@@ -13,5 +13,5 @@
 - 굳이 QueryGateway를 써야 하는 이유가 있을까? 직접 Mybatis나 JPA를 사용해서 조회하면 안되나?
 - event store에서 값을 가져올 때 식별자 ID를 Arguments로 보내는데. 
   도메인 별로는 유일하지만 모든 도메인을 통틀어서는 유일하지 않을 수 있는데 이런 경우 모든 도메인에 있는 식별자 ID에 해당하는 Event를 조회해 오는 것인가?
-  
-
+- Aggregate에 Field가 있을 필요가 있나?   
+- Aggregate Loading 최적화를 위해 Snapshot을 기록한다는데 실질적으로 사용은 어떻게 하는것인가? 고로 Aggregate Loading이란?

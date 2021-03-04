@@ -1,0 +1,8 @@
+###
+POST http://localhost:8888/expenditure/resolution/readandquery
+Content-Type: application/json
+
+{
+  "resolutionId": "20210302000001",
+  "firstSequenceNumber": 2
+}

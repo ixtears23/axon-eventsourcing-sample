@@ -11,7 +11,7 @@ public class ResolutionKeyUtils {
         String resolutionNumber = "000001";
 
         if (StringUtils.isNotBlank(maxId)) {
-            resolutionNumber = StringUtils.leftPad(Integer.parseInt(maxId) + "", 6, '0');
+            resolutionNumber = StringUtils.leftPad((Integer.parseInt(maxId) + 1) + "", 6, '0');
         }
         return resolutionNumber;
     }

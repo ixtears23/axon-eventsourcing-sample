@@ -22,9 +22,9 @@ spring:
       # update : 필요한 경우 스키마 업데이트
       # validate : 스키마를 검증하고 database를 변경하지 않습니다.
     show-sql: true
-    properties:
-      hibernate:
-        format_sql: true  # hibernate 쿼리 상세 출력
+#    properties:
+#      hibernate:
+#        format_sql: true  # hibernate 쿼리 상세 출력
   h2:
     console:
       enabled: false

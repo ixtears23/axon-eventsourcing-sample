@@ -21,7 +21,7 @@ import java.util.List;
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 @Slf4j
-@Aggregate(snapshotTriggerDefinition = "snapshotTriggerDefinition")
+@Aggregate
 public class ExpenditureResolutionAggregate {
 
     @AggregateIdentifier
@@ -38,21 +38,22 @@ public class ExpenditureResolutionAggregate {
     @AggregateMember
     private List<ExpenditureResolutionDetail> detailList = new ArrayList<>();
 
-    private ResolutionQueryMapper queryMapper;
+//    private ResolutionQueryMapper queryMapper;
 
     public ExpenditureResolutionAggregate() {
         // Axon Required...
     }
 
     @CommandHandler
-    public ExpenditureResolutionAggregate(CreateExpenditureResolutionCommand command, ResolutionQueryMapper queryMapper) {
-        this.queryMapper = queryMapper;
+    public ExpenditureResolutionAggregate(CreateExpenditureResolutionCommand command) {
+//        this.queryMapper = queryMapper;
         applyExpenditureResolutionCreatedEvent(command);
     }
 
     private void applyExpenditureResolutionCreatedEvent(CreateExpenditureResolutionCommand command) {
 
-        String maxId = queryMapper.findMaxId(ResolutionKeyUtils.getToday());
+//        String maxId = queryMapper.findMaxId(ResolutionKeyUtils.getToday());
+        String maxId = "20210302000001";
 
         List<ResolutionDetailVO> resolutionDetailVOList = new ArrayList<>();
         for (ResolutionDetailVO detailVO : command.getExpenditureResolutionDetailList()) {
@@ -144,14 +145,14 @@ public class ExpenditureResolutionAggregate {
 
     private void saveEvent(String resolutionId, String resolutionDate, String resolutionNumber, String applicant, String applicationDepartment, String applicationAmount, String summary, String applicationCategory, String electronicPaymentNumber, List<ResolutionDetailVO> resolutionDetailVO) {
         this.resolutionId = resolutionId;
-//        this.resolutionDate = resolutionDate;
-//        this.resolutionNumber = resolutionNumber;
-//        this.applicant = applicant;
-//        this.applicationDepartment = applicationDepartment;
-//        this.applicationAmount = applicationAmount;
-//        this.summary = summary;
-//        this.applicationCategory = applicationCategory;
-//        this.electronicPaymentNumber = electronicPaymentNumber;
+        this.resolutionDate = resolutionDate;
+        this.resolutionNumber = resolutionNumber;
+        this.applicant = applicant;
+        this.applicationDepartment = applicationDepartment;
+        this.applicationAmount = applicationAmount;
+        this.summary = summary;
+        this.applicationCategory = applicationCategory;
+        this.electronicPaymentNumber = electronicPaymentNumber;
 
         for (ResolutionDetailVO detailVO : resolutionDetailVO) {
 

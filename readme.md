@@ -118,3 +118,39 @@ AggreagateMember를 사용하는 이유와 AggregateMember 관련 내용
 > CommandGateway를 사용하는 쪽으로 가자...  
 
 
+### 유효성 검사
+[Google그룹-@Aggregate: business validation on the handler or listener?](https://groups.google.com/g/axonframework/c/PGWXtdfLWl0)  
+유효성 검사 방법에는 3가지 정도 있다.  
+- HandlerInterceptor
+- 외부 CommandHandler
+- Aggregate안에서 Validation  
+
+> validator가 repository(Database) 를 호출하지 않는 유효성 검사인 경우는 Aggregate안에 확실히 존재해야 한다.  
+> 유효성검사가 repository를 호출해야 한다면 Aggregate를 Blocking(차단)해야 한다고 생각하지 않음.  
+> 이런 경우는 Controller와 Aggregate 사이에 Service를 두고 Service에서 유효성 검사를 처리하도록 해도 됨.  
+ 
+
+
+[Google그룹-Good practice for contextual business logic](https://groups.google.com/g/axonframework/c/4zy-E1GCY4A)  
+의견을 올린 사람의 견해 - 이 사람은 4번째 옵션 @Controller와 @Aggregate 사이에 @Service를 두고 그곳에서 validation 하는 방법이 좋다 생각함.   
+> 1. Aggreagte안에 외부 참조를 호출하는 종속성을 추가하면 문제?가 있고 단위테스트를 어렵게 만든다.  
+> 2. Aggregate 앞에 유효성 검사 전용 CommandHandler를 두는 방법 : 설계 측면에서 더 좋을 수 있지만 2개의 명령이 필요하기 떄문에 구현하기 무거움.  
+> 3. CommandHandlerInterceptor에서 유효성 검사 : 보안과 같은 비 기능적 요구사항에 사용하는 사례가 더 적합하다 생각  
+> 4. Aggregate 앞에있는 표준 자바 클래스 (예 : Spring을 사용하여 @Service로 주석 처리 된 클래스) 사용: 해당 클래스는 REST 인터페이스와 Aggregate 사이의 중간 역할을합니다.  
+
+아래는 답변  
+> 질문에 답하기 위해는 비즈니스 논리 유효성 검사가 포함된 두가지 시나리오가 필요함.  
+- 1. 유효성 검사가 아웃 바운드 호출 (database/REST 등)을 수행합니까?  
+- 2. Aggregate의 상태와 들어오는 명령을 기반으로 유효성 검사를 수행할 수 있습니까?  
+    
+> 1번 시나리오의 경우 CommandBus에 명령을 publishing 하는 Service에 validation을 수행하는 것이 좋음.  
+> 위에서 말한 4번 옵션 @Controller와 @Aggregate 사이에 @Service를 두는 것이 좋음.  
+> 2번 시나리오의 경우 Aggregate 자체에서 가장 잘 동작함.  
+
+> 그리고 해당 유효성 검사를 (상태 비 저장) 서비스에 배치하기로 결정한 경우  
+> Axons ParameterResolver가 해당 서비스를 @CommandHandler 함수의 매개 변수로 쉽게 해결하도록 할 수 있습니다.  
+> 간단히 말해서, 시나리오 2의 경우, 당신의 제안 중 옵션 1을 선택하겠습니다.  
+
+[AxonIQ-일관성 검증 설정](https://axoniq.io/blog-overview/set-based-validation?utm_campaign=Blog%20promotion&utm_source=twitter&utm_medium=social&utm_content=set%20based%20validation)  
+
+

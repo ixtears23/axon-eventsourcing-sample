@@ -151,6 +151,20 @@ AggreagateMember를 사용하는 이유와 AggregateMember 관련 내용
 > Axons ParameterResolver가 해당 서비스를 @CommandHandler 함수의 매개 변수로 쉽게 해결하도록 할 수 있습니다.  
 > 간단히 말해서, 시나리오 2의 경우, 당신의 제안 중 옵션 1을 선택하겠습니다.  
 
+
+Axon은 Aggregate 내에서 Spring BeanParameterResolver에 의해  
+Service를 CommandHandler에 Parameter로 받으면 Bean으로 주입가능하다는데.  
+outbound call의 경우는 2가지 방안 중 하나를 선택해야 할 듯.  
+1. CommandHandler에 Service를 주입해서 validation  
+2. Controller와 Aggregate사이에 Service를 두고 validation  
+
 [AxonIQ-일관성 검증 설정](https://axoniq.io/blog-overview/set-based-validation?utm_campaign=Blog%20promotion&utm_source=twitter&utm_medium=social&utm_content=set%20based%20validation)  
 
+1. MessageDispatchInterceptor 사용  
+2. 외부(@Compoenent 클래스) @CommandHandler 사용  
+   일반적으로 부르는 이름은 External Command handler 또는 Command Handling Component 라고 함.  
+3. Parameter Resolver를 사용한 Validation  
+   ParameterResolver 인터페이스 구현.
 
+
+최종일관성 때문에 Command Modeldp Look-up Table을 만들어 야 한다고 되어 있다...  

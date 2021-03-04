@@ -38,29 +38,23 @@ public class ExpenditureResolutionAggregate {
     @AggregateMember
     private List<ExpenditureResolutionDetail> detailList = new ArrayList<>();
 
-//    private ResolutionQueryMapper queryMapper;
-
     public ExpenditureResolutionAggregate() {
         // Axon Required...
     }
 
     @CommandHandler
     public ExpenditureResolutionAggregate(CreateExpenditureResolutionCommand command) {
-//        this.queryMapper = queryMapper;
         applyExpenditureResolutionCreatedEvent(command);
     }
 
     private void applyExpenditureResolutionCreatedEvent(CreateExpenditureResolutionCommand command) {
 
-//        String maxId = queryMapper.findMaxId(ResolutionKeyUtils.getToday());
-        String maxId = "20210302000001";
-
         List<ResolutionDetailVO> resolutionDetailVOList = new ArrayList<>();
         for (ResolutionDetailVO detailVO : command.getExpenditureResolutionDetailList()) {
             resolutionDetailVOList.add(new ResolutionDetailVO(
-                    ResolutionKeyUtils.generateResolutionId(maxId) + detailVO.getResolutionTurn(),
-                    ResolutionKeyUtils.getToday(),
-                    ResolutionKeyUtils.generateResolutionNumber(maxId),
+                    command.getResolutionId() + detailVO.getResolutionTurn(),
+                    command.getResolutionDate(),
+                    command.getResolutionNumber(),
                     detailVO.getResolutionTurn(),
                     detailVO.getUser(),
                     detailVO.getAccNumber(),
@@ -82,9 +76,9 @@ public class ExpenditureResolutionAggregate {
         }
 
         apply(new ExpenditureResolutionCreatedEvent(
-                ResolutionKeyUtils.generateResolutionId(maxId),
-                ResolutionKeyUtils.getToday(),
-                ResolutionKeyUtils.generateResolutionNumber(maxId),
+                command.getResolutionId(),
+                command.getResolutionDate(),
+                command.getResolutionNumber(),
                 command.getApplicant(),
                 command.getApplicationDepartment(),
                 command.getApplicationAmount(),

@@ -2,6 +2,7 @@ package com.ibdata.eventsourcing.acc.resolution.controller;
 
 import com.ibdata.eventsourcing.acc.resolution.coreapi.command.ChangeExpenditureResolutionCommand;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.command.CreateExpenditureResolutionCommand;
+import com.ibdata.eventsourcing.acc.resolution.coreapi.command.RequestCreateExpenditureResolutionCommand;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.el.ELException;
 
 @RestController
 @RequestMapping("/expenditure/resolution")
@@ -28,7 +31,7 @@ public class ExpenditureResolutionController {
     public ResponseEntity saveResolution(@RequestBody ResolutionVO resolutionVO) {
 
         if (StringUtils.isBlank(resolutionVO.getResolutionId())) {
-            CreateExpenditureResolutionCommand saveExpenditureResolutionCommand = new CreateExpenditureResolutionCommand(
+            RequestCreateExpenditureResolutionCommand saveExpenditureResolutionCommand = new RequestCreateExpenditureResolutionCommand(
                     resolutionVO.getResolutionId(),
                     resolutionVO.getResolutionDate(),
                     resolutionVO.getResolutionNumber(),
@@ -41,7 +44,13 @@ public class ExpenditureResolutionController {
                     resolutionVO.getResolutionDetailVO()
             );
 
-            commandGateway.send(saveExpenditureResolutionCommand);
+            try {
+                commandGateway.send(saveExpenditureResolutionCommand);
+            } catch (Exception e) {
+                log.debug(e.getMessage());
+            }
+
+
         } else {
             ChangeExpenditureResolutionCommand
                     saveExpenditureResolutionCommand = new ChangeExpenditureResolutionCommand(

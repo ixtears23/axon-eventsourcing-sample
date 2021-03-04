@@ -13,7 +13,7 @@ import org.axonframework.modelling.command.Repository;
 
 
 
-@Configuration
+//@Configuration
 @AutoConfigureAfter(AxonAutoConfiguration.class)
 @Slf4j
 public class SnapshotTriggerDefinitionConfig {

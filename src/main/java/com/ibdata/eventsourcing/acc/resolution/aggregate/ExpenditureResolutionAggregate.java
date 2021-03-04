@@ -90,7 +90,7 @@ public class ExpenditureResolutionAggregate {
     }
 
     @CommandHandler
-    private void changeExpenditureResolutionCommand(ChangeExpenditureResolutionCommand command) {
+    private void handle(ChangeExpenditureResolutionCommand command) {
         applyExpenditureResolutionChangedEvent(command);
     }
 

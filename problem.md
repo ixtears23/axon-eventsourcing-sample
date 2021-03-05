@@ -102,5 +102,15 @@ List 관련 에러가 발생했다면 금방 찾았을텐데 @CommandHandler 에
   식별자ID에만 값을 대입하면 오류 발생하지 않음  
   
 
+### Snapshot 설정 문제
+2021-03-05
+- 문제  
+  Snapshot 설정 후에 snapshot_event_entry 테이블에 데이터를 쌓고 난 뒤로는 더이상 @CommandHandler 자체 호출이 안됨.  
 
+- 원인파악
+  snapshot_event_entry 테이블에 값이 없으면 정상적으로 동작함. AxonFramework 내부 코드를 따라가서 분석한 결과  
+  AnnotatedAggregate 클래스의 참조변서 aggregateRoot 값을 보면 Aggreagte 주소는 바라보고 있지만
+  해당 객체의 필드 값들이 모두 null임.  
+  Snapshot 을 적용하지 않은 경우에는 해당 aggregateRoot 변수에 있는 필드에 모두 값이 할당된 것을 볼 수 있음.  
+  aggregateRoot 필드에 값을 초기화 하는 부분이 어디있는지 찾아서 해결해야 함.  
   

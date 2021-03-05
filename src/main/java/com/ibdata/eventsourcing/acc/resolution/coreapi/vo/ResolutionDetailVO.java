@@ -25,5 +25,5 @@ public class ResolutionDetailVO {
     String accountNumber;
     String customerName;
     String causeActionNumber;
-    List<ResolutionAttachmentVO> resolutionAttachmentVO;
+    List<ResolutionAttachmentDTO> resolutionAttachmentDTO;
 }

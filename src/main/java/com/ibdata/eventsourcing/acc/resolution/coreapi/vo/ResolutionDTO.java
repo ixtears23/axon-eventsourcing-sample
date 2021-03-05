@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class ResolutionVO {
+public class ResolutionDTO {
     String resolutionId;
     String resolutionDate;
     String resolutionNumber;

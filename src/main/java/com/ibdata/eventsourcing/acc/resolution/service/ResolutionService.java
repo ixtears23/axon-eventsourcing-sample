@@ -1,21 +1,21 @@
 package com.ibdata.eventsourcing.acc.resolution.service;
 
-import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionVO;
+import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionDTO;
 
 public interface ResolutionService {
 
     // 저장
-    public ResolutionVO saveResolution(ResolutionVO resolutionVO);
+    public ResolutionDTO saveResolution(ResolutionDTO resolutionDTO);
 
     // 승인
-    public ResolutionVO approveResolution(ResolutionVO resolutionVO);
+    public ResolutionDTO approveResolution(ResolutionDTO resolutionDTO);
 
     // 반려
-    public ResolutionVO rejectResolution(ResolutionVO resolutionVO);
+    public ResolutionDTO rejectResolution(ResolutionDTO resolutionDTO);
 
     // 회수
-    public ResolutionVO recallResolution(ResolutionVO resolutionVO);
+    public ResolutionDTO recallResolution(ResolutionDTO resolutionDTO);
 
     // 삭제
-    public ResolutionVO deleteResolution(ResolutionVO resolutionVO);
+    public ResolutionDTO deleteResolution(ResolutionDTO resolutionDTO);
 }

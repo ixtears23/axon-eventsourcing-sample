@@ -4,6 +4,7 @@ import com.ibdata.eventsourcing.acc.resolution.coreapi.command.ChangeExpenditure
 import com.ibdata.eventsourcing.acc.resolution.coreapi.command.CreateExpenditureResolutionCommand;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionChangedEvent;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionCreatedEvent;
+import com.ibdata.eventsourcing.acc.resolution.coreapi.event.ExpenditureResolutionDetailCreatedEvent;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionDetailVO;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
@@ -19,6 +20,9 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 @Slf4j
 @Aggregate
+//        (
+//        snapshotTriggerDefinition = "snapshotTriggerDefinition",
+//        repository = "expenditureResolutionAggregateRepository")
 public class ExpenditureResolutionAggregate {
 
     @AggregateIdentifier
@@ -41,7 +45,7 @@ public class ExpenditureResolutionAggregate {
 
     @CommandHandler
     public ExpenditureResolutionAggregate(CreateExpenditureResolutionCommand command) {
-
+        log.debug("handling {}", command);
         List<ResolutionDetailVO> resolutionDetailVOList = new ArrayList<>();
         for (ResolutionDetailVO detailVO : command.getExpenditureResolutionDetailList()) {
             resolutionDetailVOList.add(new ResolutionDetailVO(
@@ -80,10 +84,36 @@ public class ExpenditureResolutionAggregate {
                 command.getElectronicPaymentNumber(),
                 resolutionDetailVOList
         ));
+
+        for (ResolutionDetailVO detailVO : command.getExpenditureResolutionDetailList()) {
+
+            apply(new ExpenditureResolutionDetailCreatedEvent(
+                    resolutionId + detailVO.getResolutionTurn(),
+                    detailVO.getResolutionDate(),
+                    detailVO.getResolutionNumber(),
+                    detailVO.getResolutionTurn(),
+                    detailVO.getUser(),
+                    detailVO.getAccNumber(),
+                    detailVO.getCostCode(),
+                    detailVO.getBudgetYear(),
+                    detailVO.getAnnualNumber(),
+                    detailVO.getReceipt(),
+                    detailVO.getExecutionAmount(),
+                    detailVO.getCardNumber(),
+                    detailVO.getApprovalNumber(),
+                    detailVO.getCardCompany(),
+                    detailVO.getBank(),
+                    detailVO.getAccountHolder(),
+                    detailVO.getAccountNumber(),
+                    detailVO.getCustomerName(),
+                    detailVO.getCauseActionNumber()
+            ));
+        }
     }
 
     @CommandHandler
     private void handle(ChangeExpenditureResolutionCommand command) {
+        log.debug("handling {}", command);
         apply(new ExpenditureResolutionChangedEvent(
                 command.getResolutionId(),
                 command.getResolutionDate(),
@@ -100,6 +130,7 @@ public class ExpenditureResolutionAggregate {
 
     @EventSourcingHandler
     public void on(ExpenditureResolutionCreatedEvent event) {
+        log.debug("applying {}", event);
         saveEvent(event.getResolutionId(),
                 event.getResolutionDate(),
                 event.getResolutionNumber(),
@@ -114,6 +145,7 @@ public class ExpenditureResolutionAggregate {
 
     @EventSourcingHandler
     public void on(ExpenditureResolutionChangedEvent event) {
+        log.debug("applying {}", event);
         saveEvent(event.getResolutionId(),
                 event.getResolutionDate(),
                 event.getResolutionNumber(),
@@ -136,6 +168,15 @@ public class ExpenditureResolutionAggregate {
         this.summary = summary;
         this.applicationCategory = applicationCategory;
         this.electronicPaymentNumber = electronicPaymentNumber;
+        log.debug("resolutionId : {}", this.resolutionId);
+        log.debug("resolutionDate : {}", this.resolutionDate);
+        log.debug("resolutionNumber : {}", this.resolutionNumber);
+        log.debug("applicant : {}", this.applicant);
+        log.debug("applicationDepartment : {}", this.applicationDepartment);
+        log.debug("applicationAmount : {}", this.applicationAmount);
+        log.debug("summary : {}", this.summary);
+        log.debug("applicationCategory : {}", this.applicationCategory);
+        log.debug("electronicPaymentNumber : {}", this.electronicPaymentNumber);
 
         for (ResolutionDetailVO detailVO : resolutionDetailVO) {
             ExpenditureResolutionDetail expenditureResolutionDetail = new ExpenditureResolutionDetail(

@@ -4,9 +4,9 @@ import com.ibdata.eventsourcing.acc.resolution.coreapi.command.ChangeExpenditure
 import com.ibdata.eventsourcing.acc.resolution.coreapi.command.ReadAndQueryCommand;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.command.RequestCreateExpenditureResolutionCommand;
 import com.ibdata.eventsourcing.acc.resolution.coreapi.command.TrackingCommand;
-import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ReadAndQueryVO;
-import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionVO;
-import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.TrackingVO;
+import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ReadAndQueryDTO;
+import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.ResolutionDTO;
+import com.ibdata.eventsourcing.acc.resolution.coreapi.vo.TrackingDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -31,51 +31,51 @@ public class ExpenditureResolutionController {
     }
 
     @PostMapping("/readandquery")
-    public ResponseEntity<?> readAndQuery(@RequestBody ReadAndQueryVO readAndQueryVO) {
+    public ResponseEntity<?> readAndQuery(@RequestBody ReadAndQueryDTO readAndQueryDTO) {
 
-        CompletableFuture<Object> send = commandGateway.send(new ReadAndQueryCommand(readAndQueryVO.getResolutionId(), readAndQueryVO.getFirstSequenceNumber()));
+        CompletableFuture<Object> send = commandGateway.send(new ReadAndQueryCommand(readAndQueryDTO.getResolutionId(), readAndQueryDTO.getFirstSequenceNumber()));
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/tracking")
-    public ResponseEntity<?> tracking(@RequestBody TrackingVO trackingVO) {
+    public ResponseEntity<?> tracking(@RequestBody TrackingDTO trackingDTO) {
 
-        CompletableFuture<Object> send = commandGateway.send(new TrackingCommand(trackingVO.getTrackingEventProcessorName(), trackingVO.getIndex()));
+        CompletableFuture<Object> send = commandGateway.send(new TrackingCommand(trackingDTO.getTrackingEventProcessorName(), trackingDTO.getIndex()));
 
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveResolution(@RequestBody ResolutionVO resolutionVO) {
+    public ResponseEntity<?> saveResolution(@RequestBody ResolutionDTO resolutionDTO) {
 
-        if (StringUtils.isBlank(resolutionVO.getResolutionId())) {
+        if (StringUtils.isBlank(resolutionDTO.getResolutionId())) {
             RequestCreateExpenditureResolutionCommand saveExpenditureResolutionCommand = new RequestCreateExpenditureResolutionCommand(
-                    resolutionVO.getResolutionId(),
-                    resolutionVO.getResolutionDate(),
-                    resolutionVO.getResolutionNumber(),
-                    resolutionVO.getApplicant(),
-                    resolutionVO.getApplicationDepartment(),
-                    resolutionVO.getApplicationAmount(),
-                    resolutionVO.getSummary(),
-                    resolutionVO.getApplicationCategory(),
-                    resolutionVO.getElectronicPaymentNumber(),
-                    resolutionVO.getResolutionDetailVO()
+                    resolutionDTO.getResolutionId(),
+                    resolutionDTO.getResolutionDate(),
+                    resolutionDTO.getResolutionNumber(),
+                    resolutionDTO.getApplicant(),
+                    resolutionDTO.getApplicationDepartment(),
+                    resolutionDTO.getApplicationAmount(),
+                    resolutionDTO.getSummary(),
+                    resolutionDTO.getApplicationCategory(),
+                    resolutionDTO.getElectronicPaymentNumber(),
+                    resolutionDTO.getResolutionDetailVO()
             );
 
             CompletableFuture<Object> send = commandGateway.send(saveExpenditureResolutionCommand);
         } else {
             ChangeExpenditureResolutionCommand
                     saveExpenditureResolutionCommand = new ChangeExpenditureResolutionCommand(
-                    resolutionVO.getResolutionId(),
-                    resolutionVO.getResolutionDate(),
-                    resolutionVO.getResolutionNumber(),
-                    resolutionVO.getApplicant(),
-                    resolutionVO.getApplicationAmount(),
-                    resolutionVO.getSummary(),
-                    resolutionVO.getSummary(),
-                    resolutionVO.getApplicationCategory(),
-                    resolutionVO.getElectronicPaymentNumber(),
-                    resolutionVO.getResolutionDetailVO()
+                    resolutionDTO.getResolutionId(),
+                    resolutionDTO.getResolutionDate(),
+                    resolutionDTO.getResolutionNumber(),
+                    resolutionDTO.getApplicant(),
+                    resolutionDTO.getApplicationAmount(),
+                    resolutionDTO.getSummary(),
+                    resolutionDTO.getSummary(),
+                    resolutionDTO.getApplicationCategory(),
+                    resolutionDTO.getElectronicPaymentNumber(),
+                    resolutionDTO.getResolutionDetailVO()
             );
 
             CompletableFuture<Object> send = commandGateway.send(saveExpenditureResolutionCommand);

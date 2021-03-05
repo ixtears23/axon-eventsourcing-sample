@@ -2,6 +2,8 @@ package com.ibdata.eventsourcing.config;
 
 import com.ibdata.eventsourcing.acc.resolution.aggregate.ExpenditureResolutionAggregate;
 import lombok.extern.slf4j.Slf4j;
+import org.axonframework.common.caching.Cache;
+import org.axonframework.common.caching.WeakReferenceCache;
 import org.axonframework.common.transaction.TransactionManager;
 import org.axonframework.eventsourcing.*;
 import org.axonframework.eventsourcing.eventstore.EventStore;
@@ -14,14 +16,14 @@ import org.axonframework.modelling.command.Repository;
 
 
 //@Configuration
-@AutoConfigureAfter(AxonAutoConfiguration.class)
+//@AutoConfigureAfter(AxonAutoConfiguration.class)
 @Slf4j
 public class SnapshotTriggerDefinitionConfig {
 
     @Bean
     public AggregateFactory<ExpenditureResolutionAggregate> aggregateFactory() {
         log.debug("==========SnapshotTriggerDefinitionConfig.aggregateFactory==========");
-        return new GenericAggregateFactory<ExpenditureResolutionAggregate>(ExpenditureResolutionAggregate.class);
+        return new GenericAggregateFactory<>(ExpenditureResolutionAggregate.class);
     }
 
     @Bean
@@ -40,6 +42,11 @@ public class SnapshotTriggerDefinitionConfig {
         log.debug("==========SnapshotTriggerDefinitionConfig.snapshotTriggerDefinition==========");
         final int THRESHOLD = 5;
         return new EventCountSnapshotTriggerDefinition(snapshotter, THRESHOLD);
+    }
+
+    @Bean
+    public Cache cache() {
+        return new WeakReferenceCache();
     }
 
     @Bean

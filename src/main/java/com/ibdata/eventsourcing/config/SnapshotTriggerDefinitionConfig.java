@@ -13,10 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.axonframework.modelling.command.Repository;
 
-
-
-//@Configuration
-//@AutoConfigureAfter(AxonAutoConfiguration.class)
+@Configuration
+@AutoConfigureAfter(AxonAutoConfiguration.class)
 @Slf4j
 public class SnapshotTriggerDefinitionConfig {
 
@@ -58,5 +56,4 @@ public class SnapshotTriggerDefinitionConfig {
                 .snapshotTriggerDefinition(snapshotTriggerDefinition)
                 .build();
     }
-
 }

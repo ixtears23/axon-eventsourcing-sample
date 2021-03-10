@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,8 +46,9 @@ public class ExpenditureResolutionController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("/save")
-    public ResponseEntity<?> saveResolution(@RequestBody ResolutionDTO resolutionDTO) {
+    public ResponseEntity<?> saveResolution(@RequestBody ResolutionDTO resolutionDTO) throws Exception {
 
         if (StringUtils.isBlank(resolutionDTO.getResolutionId())) {
             RequestCreateExpenditureResolutionCommand saveExpenditureResolutionCommand = new RequestCreateExpenditureResolutionCommand(
@@ -70,15 +72,21 @@ public class ExpenditureResolutionController {
                     resolutionDTO.getResolutionDate(),
                     resolutionDTO.getResolutionNumber(),
                     resolutionDTO.getApplicant(),
+                    resolutionDTO.getApplicationDepartment(),
                     resolutionDTO.getApplicationAmount(),
-                    resolutionDTO.getSummary(),
                     resolutionDTO.getSummary(),
                     resolutionDTO.getApplicationCategory(),
                     resolutionDTO.getElectronicPaymentNumber(),
                     resolutionDTO.getResolutionDetailVO()
             );
 
+            final boolean BOOL = false;
             CompletableFuture<Object> send = commandGateway.send(saveExpenditureResolutionCommand);
+            if (BOOL) {
+                log.debug("------------------------Controller에서 강제 Execption 발생------------------------");
+                throw new Exception("강제 에러!!!!");
+            }
+            CompletableFuture<Object> send2 = commandGateway.send(saveExpenditureResolutionCommand);
         }
 
         return new ResponseEntity(HttpStatus.OK);

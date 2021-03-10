@@ -20,7 +20,7 @@ public class ExpenditureResolutionCommandHandler {
     public void handle(RequestCreateExpenditureResolutionCommand command, ResolutionQueryMapper resolutionQueryMapper, CommandGateway commandGateway) throws ExecutionException, InterruptedException {
 
 //        String maxId = resolutionQueryMapper.findMaxId(ResolutionKeyUtils.getToday());
-        String maxId = "20";
+        String maxId = "22";
 
         commandGateway.send(new CreateExpenditureResolutionCommand(
                 ResolutionKeyUtils.generateResolutionId(maxId),

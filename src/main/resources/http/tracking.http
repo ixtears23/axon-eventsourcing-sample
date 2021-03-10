@@ -4,5 +4,5 @@ Content-Type: application/json
 
 {
   "trackingEventProcessorName": "com.ibdata.eventsourcing.acc.resolution.projection",
-  "index": 0
+  "index": 1382
 }

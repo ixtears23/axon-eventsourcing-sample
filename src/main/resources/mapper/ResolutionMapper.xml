@@ -59,7 +59,7 @@
             CAUSE_ACTION_NUMBER = #{causeActionNumber}
         WHERE RESOLUTION_DATE = #{resolutionDate}
         AND RESOLUTION_NUMBER = #{resolutionNumber}
-            RESOLUTION_TURN = #{resolutionTurn}
+        AND RESOLUTION_TURN = #{resolutionTurn}
     </update>
 
     <delete id="deleteResolutionDetail" parameterType="com.ibdata.eventsourcing.acc.resolution.coreapi.entity.TbResolutionDetail">

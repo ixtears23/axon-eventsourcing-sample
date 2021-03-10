@@ -113,4 +113,11 @@ List 관련 에러가 발생했다면 금방 찾았을텐데 @CommandHandler 에
   해당 객체의 필드 값들이 모두 null임.  
   Snapshot 을 적용하지 않은 경우에는 해당 aggregateRoot 변수에 있는 필드에 모두 값이 할당된 것을 볼 수 있음.  
   aggregateRoot 필드에 값을 초기화 하는 부분이 어디있는지 찾아서 해결해야 함.  
-  
+
+### @CommandHandler를 실수로 private 메서드로 선언해서 못 찾는 문제 발생... 꼭 public으로 해야되는줄 알았는데 아님. private으로 해도 찾음.
+
+### Transaction 경계
+- 하나의 `@CommandHandler` 메서드에서 `@EventSourcingHandler`를 3개 호출하는데. 1번 호출하고 오류 발생 시키면 1번 호출했던 `@EventSourcingHandelr`로 Commit 되지 않음.
+- 기본적으로 `@CommandHandler` 가 Transaction 경계인걸로 확인 됨.
+
+- CommandModel 에서 EventStore에 Commit 하고 나서 @EventHandler를 호출한 다음에 오류 발생해도 CommandModel 에서는 Rollback되지 않음.

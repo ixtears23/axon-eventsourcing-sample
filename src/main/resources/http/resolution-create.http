@@ -81,9 +81,9 @@ POST http://localhost:8888/expenditure/resolution/save
 Content-Type: application/json
 
 {
-  "resolutionId": "20210302000001",
-  "resolutionDate": "20210302",
-  "resolutionNumber": "000001",
+  "resolutionId": "20210310000023",
+  "resolutionDate": "20210310",
+  "resolutionNumber": "000023",
   "applicant": "90001",
   "applicationDepartment": "D50001",
   "applicationAmount": "60000000",
@@ -92,8 +92,8 @@ Content-Type: application/json
   "electronicPaymentNumber": "",
   "resolutionDetailVO": [
     {
-      "resolutionDetailId": "202103020000011",
-      "resolutionDate": "20210302",
+      "resolutionDetailId": "202103100000231",
+      "resolutionDate": "20210225",
       "resolutionNumber": "00001",
       "resolutionTurn": "1",
       "user": "90002",
@@ -123,8 +123,8 @@ Content-Type: application/json
     },
 
     {
-      "resolutionDetailId": "202103020000012",
-      "resolutionDate": "20210302",
+      "resolutionDetailId": "202103100000232",
+      "resolutionDate": "20210225",
       "resolutionNumber": "00001",
       "resolutionTurn": "2",
       "user": "90002",

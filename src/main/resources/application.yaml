@@ -4,11 +4,11 @@ spring:
   devtools:
     livereload:
       enabled: true
-  datasource: # ibdata_devday_mariadb
+  datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mysql://211.199.110.246:3379/ibdata
-    username: ibdata
-    password: "!ibdata@"
+    url: 
+    username: 
+    password: 
 #    initialization-mode: always  # data-h2db.sql(DML) 과 schema-h2db.sql(DDL) 을 사용해서 datasocure를 초기화 시킴. jpa.hibernate.ddl-auto 는 jpa 관련 ddl만 초기화
 #    data: classpath:scripts/data-${spring.datasource.platform}.sql
 #    schema: classpath:scripts/schema-${spring.datasource.platform}.sql

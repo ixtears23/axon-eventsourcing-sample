@@ -1,4 +1,4 @@
-# 지출결의 prototype? demo?
+# axon-eventsouring-sample
 
 
 
